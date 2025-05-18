@@ -3,9 +3,9 @@ import random
 while True:
     print("\n=== MENU CROSSFIT ===")
     print("1 - Registrar treino do dia")
-    print("2 - Calcular proteínas ingeridas")
+    print("2 - Proteínas ingeridas")
     print("3 - Manipular treinos (adicionar, substituir, visualizar, remover)")
-    print("4 - Treino aleatório")
+    print("4 - Sugerir treino aleatório")
     print("5 - Filtrar movimentos/treinos")
     print("6 - Gerenciar metas de desempenho")
     print("0 - Sair")
@@ -13,7 +13,7 @@ while True:
 
     if opcao == "1":
         # treinododia.py
-        file = open("dia_a_dia.txt", "a", encoding='utf-8')
+        file = open("dia_a_dia.txt", "a", encoding="utf-8")
         exercicio = []
         lista = []
         dia = int(input("Que dia do mês é hoje? "))
@@ -28,15 +28,19 @@ while True:
             yue = str(mes)
         ano = int(input("Em que ano estamos? "))
         nian = str(ano)
-        quantidade = int(input("Quantos exercícios foram realizados hoje? "))
-        if quantidade < 1:
-            print("resposta inválida")
-            quit()
+        try:
+            quantidade = int(input("Quantos exercícios foram realizados hoje? "))
+            if quantidade < 1:
+               print("Resposta inválida")
+               quit()
+        except ValueError:
+          print("Resposta inválida")
+          quit()
         for i in range(quantidade):
-            exercício = input("Exercício feito hoje: ")
-            exercicio.append(exercício)
-            duração = float(input("Duração desse exercício em minutos: "))
-            lista.append(str(duração))
+            exercicio_input = input("Exercício feito hoje: ")
+            exercicio.append(exercicio_input)
+            duracao = float(input("Duração desse exercício em minutos: "))
+            lista.append(str(duracao))
         for i in range(len(exercicio)):
             a = exercicio[i]
             b = lista[i]
@@ -54,7 +58,7 @@ while True:
             "legume": {"ppg": 0.06},
             "fruta": {"ppg": 0.01}
         }
-        relatorio = []
+        
         proteina_total = 0
 
         def entrada_float_positiva(pergunta):
@@ -88,14 +92,6 @@ while True:
         proteina_total += proteinas["ovo"]["ppu"] * qtd_ovos
 
         print(f"\nTotal de proteínas ingeridas: {proteina_total:.2f}g")
-        relatorio.append(f"\nTOTAL DE PROTEÍNAS: {proteina_total:.2f}g")
-
-        arquivo = open("proteinas_diarias.txt", "w", encoding="utf-8")
-        arquivo.write("proteínas diárias\n")
-        for linha in relatorio:
-            arquivo.write(linha + "\n")
-        arquivo.close()
-        print("\nRelatório salvo como 'proteinas_diarias.txt'.")
 
     elif opcao == "3":
         # manipulaçãoDoTreino.py
@@ -140,8 +136,8 @@ while True:
                     file.close()
                 else:
                     break
-        except:
-            breakpoint
+        except Exception as e:
+            print(f"Erro: {e}")
 
     elif opcao == "4":
         # Aleatorio.py
@@ -163,7 +159,7 @@ while True:
         def filtrar(movtreino):
             existe_no_crud = 0
             try:
-                crud = open("arquivo crud.txt", "r", encoding='utf8')
+                crud = open("dia_a_dia.txt", "r", encoding='utf8')
                 linhascrud = crud.readlines()
                 crud.close()
                 filtrando = open("Filtro.txt", "w", encoding='utf8')
@@ -177,7 +173,7 @@ while True:
                 else:
                     print("Filtragem concluída")
             except FileNotFoundError:
-                print("Arquivo 'arquivo crud.txt' não encontrado.")
+                print("Arquivo 'dia_a_dia.txt' não encontrado.")
         Wodmov_filt = input("Insira o treino ou movimento que deseja filtrar: ").upper()
         filtrar(Wodmov_filt)
 
@@ -220,8 +216,9 @@ while True:
             acompanhar_metas(treino_que_fiz)
 
     elif opcao == "0":
-        print("Fechando o programa.")
+        print("fechando o programa")
         break
 
     else:
         print("Opção inválida. Tente novamente.")
+
